@@ -299,8 +299,8 @@
     "sticker": {
       "uri": "https://raw.githubusercontent.com/galmoe/sticker/master/sticker/271296361570369536.png",
       "hash": "",
-      "width": 50,
-      "height": 50,
+      "width": 150,
+      "height": 150,
       "size": 1024,
       "isLocal": false,
       "thumb_id": 1
@@ -320,8 +320,8 @@
     "sticker": {
       "uri": "https://raw.githubusercontent.com/galmoe/sticker/master/sticker/463578777104941080.gif",
       "hash": "",
-      "width": 50,
-      "height": 50,
+      "width": 150,
+      "height": 150,
       "size": 1024,
       "isLocal": false,
       "thumb_id": 1

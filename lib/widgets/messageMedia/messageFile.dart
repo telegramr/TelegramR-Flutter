@@ -80,9 +80,9 @@ class MessageFile extends StatelessWidget {
     return Row(
       children: <Widget>[
         Container(
-          width: 90.0,
-          height: 90.0,
-          padding: EdgeInsets.all(20.0),
+          width: 80.0,
+          height: 80.0,
+          padding: EdgeInsets.all(15.0),
           margin: EdgeInsets.only(right: 10.0),
           color: Color(0xFFEBF0F5),
           child: FlatButton(
@@ -98,7 +98,7 @@ class MessageFile extends StatelessWidget {
         ),
         LimitedBox(
           maxWidth: MediaQuery.of(context).size.width - 260,
-          maxHeight: 90,
+          maxHeight: 80,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
@@ -110,7 +110,6 @@ class MessageFile extends StatelessWidget {
                   maxLines: 2,
                   style: TextStyle(
                     color: Color(0xFF4E9AD4),
-                    fontWeight: FontWeight.bold,
                     fontSize: 16.0,
                   ),
                 ),

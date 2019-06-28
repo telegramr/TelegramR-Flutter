@@ -221,61 +221,103 @@ class _ChatPageState extends State<ChatPage>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        elevation: 0,
-        title: Container(
-          child: Row(
+        appBar: AppBar(
+          elevation: 0,
+          title: Container(
+            child: Row(
+              children: <Widget>[
+                CircleAvatar(
+                  radius: 21.0,
+                  backgroundImage: NetworkImage(
+                      'https://avatars1.githubusercontent.com/u/1935767?s=180&v=4'),
+                ),
+                Container(
+                  padding: EdgeInsets.only(left: 10),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Text(
+                        'yorkie',
+                        style: TextStyle(
+                          color: Colors.white,
+                        ),
+                      ),
+                      Text('连接中...',
+                          style: TextStyle(
+                            fontSize: 12,
+                            color: Colors.white,
+                          )),
+                    ],
+                  ),
+                )
+              ],
+            ),
+          ),
+          centerTitle: true,
+          actions: <Widget>[
+            IconButton(
+              icon: Icon(Icons.more_vert),
+              onPressed: () {},
+            ),
+          ],
+        ),
+        body: _renderChatMain(),
+        floatingActionButton: _renderFloatingBtn()
+        );
+  }
+
+  Widget _renderFloatingBtn() {
+    return Container(
+      transform: Matrix4.translationValues(8.0, 0.0, 0.0),
+      width: 40.0,
+      height: 150.0,
+      child: Column(
+        children: <Widget>[
+          Container(
+              child: Column(
             children: <Widget>[
-              CircleAvatar(
-                radius: 21.0,
-                backgroundImage: NetworkImage(
-                    'https://avatars1.githubusercontent.com/u/1935767?s=180&v=4'),
+              FloatingActionButton(
+                elevation: 1.0,
+                highlightElevation: 1.0,
+                child: Icon(
+                  Icons.alternate_email,
+                  color: Colors.grey,
+                ),
+                onPressed: goButtom,
+                backgroundColor: Colors.white,
               ),
               Container(
-                padding: EdgeInsets.only(left: 10),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Text(
-                      'yorkie',
-                      style: TextStyle(
-                        color: Colors.white,
-                      ),
-                    ),
-                    Text('连接中...',
-                        style: TextStyle(
-                          fontSize: 12,
-                          color: Colors.white,
-                        )),
-                  ],
+                padding: EdgeInsets.symmetric(horizontal: 5, vertical: 2),
+                transform: Matrix4.translationValues(0.0, -55.0, 0.0),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(50),
+                  color: Colors.lightBlue,
+                ),
+                child: Text(
+                  '2',
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 14),
                 ),
               )
             ],
-          ),
-        ),
-        centerTitle: true,
-        actions: <Widget>[
-          IconButton(
-            icon: Icon(Icons.more_vert),
-            onPressed: () {},
-          ),
+          )),
+          Container(
+            transform: Matrix4.translationValues(0.0, -20.0, 0.0),
+            child: FloatingActionButton(
+              elevation: 1.0,
+              highlightElevation: 1.0,
+              child: Icon(
+                Icons.arrow_downward,
+                color: Colors.grey,
+              ),
+              onPressed: goButtom,
+              backgroundColor: Colors.white,
+            ),
+          )
         ],
-      ),
-      body: _renderChatMain(),
-      floatingActionButton: Container(
-        width: 50.0,
-        height: 50.0,
-        margin: EdgeInsets.only(bottom: 45),
-        child: FloatingActionButton(
-          elevation: 1.0,
-          child: Icon(
-            Icons.arrow_downward,
-            color: Colors.grey,
-          ),
-          onPressed: goButtom,
-          backgroundColor: Colors.white,
-        ),
       ),
     );
   }
@@ -293,21 +335,19 @@ class _ChatPageState extends State<ChatPage>
                       image: AssetImage("assets/images/wallpaper.jpg"),
                       fit: BoxFit.cover,
                     ),
-                    
                   ),
-                   child: messages == null
-                    ? Center(child: CircularProgressIndicator())
-                    : ListView.builder(
-                        controller: listScrollController,
-                        physics: BouncingScrollPhysics(),
-                        reverse: true,
-                        padding: EdgeInsets.symmetric(horizontal: 7.0),
-                        itemCount: messages.length,
-                        itemBuilder: (context, index) =>
-                            _renderMessageItem(messages[index], index),
-                      ),
+                  child: messages == null
+                      ? Center(child: CircularProgressIndicator())
+                      : ListView.builder(
+                          controller: listScrollController,
+                          physics: BouncingScrollPhysics(),
+                          reverse: true,
+                          padding: EdgeInsets.symmetric(horizontal: 7.0),
+                          itemCount: messages.length,
+                          itemBuilder: (context, index) =>
+                              _renderMessageItem(messages[index], index),
+                        ),
                 ),
-               
               ),
               _renderBottomBar(),
               _renderMenu(),
@@ -324,12 +364,9 @@ class _ChatPageState extends State<ChatPage>
     return Container(
       constraints: BoxConstraints(minHeight: 50.0),
       decoration: BoxDecoration(
-        /// color: Theme.of(context).backgroundColor,
-        /// TODO: 添加color后，IconButton波纹会被覆盖
-        color: Colors.white,
         border: BorderDirectional(
           top: BorderSide(
-            color: Colors.grey,
+            color: Color(0xFFBFBFBF),
             width: 0.3,
           ),
         ),
@@ -412,7 +449,7 @@ class _ChatPageState extends State<ChatPage>
       ),
       // TODO: 获取键盘高度
       // height: keyboardViewHeight,
-      height: showMenu ? 200.0 : 0.0,
+      height: showMenu ? 220.0 : 0.0,
       color: Colors.white,
       child: GridView(
         padding: EdgeInsets.only(top: 15.0),
