@@ -5,45 +5,81 @@ import './messageImg.dart';
 import './messageSticker.dart';
 import './messageFile.dart';
 
-class Message extends StatelessWidget {
-  MessageT message;
+// class Message extends StatefulWidget {
+//   final MessageT message;
+//   final int index;
+//   Message(this.message, this.index, {Key key}) : super(key: key);
 
-  Message(this.message);
+//   _MessageState createState() => _MessageState();
+// }
 
-  @override
-  Widget build(BuildContext context) {
-    print('=======> reRender');
-    switch (message.type) {
-      case 'info':
-        return _renderNotification(message.message['text']);
-      default:
-        return message.out
-            ? _renderSelfMessage(message)
-            : _renderFriendMessage(message);
-    }
+// class _MessageState extends State<Message> {
+
+//   @override
+//   Widget build(BuildContext context) {
+//     print('=======> reRender$widget.index');
+//      switch (widget.message.type) {
+//       case 'info':
+//         return _renderNotification(widget.message.message['text']);
+//       default:
+//         return widget.message.out
+//             ? _renderSelfMessage(widget.message)
+//             : _renderFriendMessage(widget.message);
+//     }
+//   }
+// }
+
+// class Message extends StatelessWidget {
+//   final MessageT message;
+
+//   Message(this.message);
+
+//   @override
+//   Widget build(BuildContext context) {
+//     print('=======> reRender');
+//     switch (message.type) {
+//       case 'info':
+//         return _renderNotification(message.message['text']);
+//       default:
+//         return message.out
+//             ? _renderSelfMessage(message)
+//             : _renderFriendMessage(message);
+//     }
+//   }
+// }
+
+Widget renderMessage(BuildContext context, MessageT messageObj, int index) {
+  print('=======> reRender: $index');
+  switch (messageObj.type) {
+    case 'info':
+      return _renderNotification(messageObj.message['text']);
+    default:
+      return messageObj.out
+          ? _renderSelfMessage(context, messageObj)
+          : _renderFriendMessage(context, messageObj);
   }
 }
 
-Widget _renderMessageContent(MessageT messageObj) {
+Widget _renderMessageContent(BuildContext context, MessageT messageObj) {
   switch (messageObj.type) {
     case 'text':
-      return MessageText(
+      return MessageText(context,
           messageText: messageObj.message['text'], isOut: messageObj.out);
       break;
     case 'img':
-      return MessageImg(
+      return MessageImg(context,
           img: ImgT.fromJson(messageObj.message['img']), isOut: messageObj.out);
       break;
     case 'thumb':
       return Text('this is thumb');
       break;
     case 'sticker':
-      return MessageSticker(
+      return MessageSticker(context,
           sticker: StickerT.fromJson(messageObj.message['sticker']),
           isOut: messageObj.out);
       break;
     case 'file':
-      return MessageFile(
+      return MessageFile(context,
           file: FileT.fromJson(messageObj.message['file']),
           isOut: messageObj.out);
       break;
@@ -55,7 +91,7 @@ Widget _renderMessageContent(MessageT messageObj) {
   }
 }
 
-Widget _renderSelfMessage(MessageT messageObj) {
+Widget _renderSelfMessage(BuildContext context, MessageT messageObj) {
   return Padding(
     padding: EdgeInsets.symmetric(vertical: 7.5),
     child: Row(
@@ -83,7 +119,7 @@ Widget _renderSelfMessage(MessageT messageObj) {
                 ),
               ),
               // 内容
-              _renderMessageContent(messageObj)
+              _renderMessageContent(context, messageObj)
             ],
           ),
         ),
@@ -96,7 +132,7 @@ Widget _renderSelfMessage(MessageT messageObj) {
   );
 }
 
-Widget _renderFriendMessage(MessageT messageObj) {
+Widget _renderFriendMessage(BuildContext context, MessageT messageObj) {
   return Padding(
     padding: EdgeInsets.symmetric(vertical: 7.5),
     child: Row(
@@ -127,7 +163,7 @@ Widget _renderFriendMessage(MessageT messageObj) {
                 ),
               ),
               // 内容
-              _renderMessageContent(messageObj)
+              _renderMessageContent(context, messageObj)
             ],
           ),
         )

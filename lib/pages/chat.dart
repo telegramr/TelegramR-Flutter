@@ -215,7 +215,7 @@ class _ChatPageState extends State<ChatPage>
   }
 
   Widget _renderMessageItem(chatDataIndex, int index) {
-    return Message(chatDataIndex);
+    return renderMessage(context, chatDataIndex, index);
   }
 
   @override
@@ -263,7 +263,7 @@ class _ChatPageState extends State<ChatPage>
           ],
         ),
         body: _renderChatMain(),
-        floatingActionButton: _renderFloatingBtn()
+        // floatingActionButton: _renderFloatingBtn()
         );
   }
 
@@ -340,7 +340,6 @@ class _ChatPageState extends State<ChatPage>
                       ? Center(child: CircularProgressIndicator())
                       : ListView.builder(
                           controller: listScrollController,
-                          physics: BouncingScrollPhysics(),
                           reverse: true,
                           padding: EdgeInsets.symmetric(horizontal: 7.0),
                           itemCount: messages.length,

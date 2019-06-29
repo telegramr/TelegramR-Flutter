@@ -33,84 +33,76 @@ class StickerT {
   }
 }
 
-class MessageSticker extends StatelessWidget {
-  final StickerT sticker;
-  final bool isOut;
+Widget MessageSticker(BuildContext context,
+    {StickerT sticker, bool isOut = false}) {
+  double maxWidth = MediaQuery.of(context).size.width / 4 * 3 > 160
+      ? 160.0
+      : MediaQuery.of(context).size.width / 4 * 3;
 
-  const MessageSticker({this.sticker, this.isOut = false, Key key})
-      : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    double maxWidth =  MediaQuery.of(context).size.width / 4 * 3 > 160
-                      ? 160.0
-                      : MediaQuery.of(context).size.width / 4 * 3;
-
-    return Container(
-      margin: EdgeInsets.only(top: 5.0),
-      child: ClipRRect(
-        borderRadius: isOut
-            ? BorderRadius.only(
-                bottomLeft: Radius.circular(8.0),
-                topLeft: Radius.circular(8.0),
-                bottomRight: Radius.circular(8.0),
-              )
-            : BorderRadius.only(
-                bottomLeft: Radius.circular(8.0),
-                topRight: Radius.circular(8.0),
-                bottomRight: Radius.circular(8.0),
-              ),
-        child: Column(
-          children: <Widget>[
-            Container(
-              padding: EdgeInsets.all(2.0),
-              child: LimitedBox(
-                  maxWidth: sticker.width.toDouble() > maxWidth
-                      ? maxWidth
-                      : sticker.width.toDouble(),
-                  child: sticker.isLocal
-                      ? _renderLocalImg(context, sticker, isOut)
-                      : _renderNetImg(context, sticker, isOut)),
+  return Container(
+    margin: EdgeInsets.only(top: 5.0),
+    child: ClipRRect(
+      borderRadius: isOut
+          ? BorderRadius.only(
+              bottomLeft: Radius.circular(8.0),
+              topLeft: Radius.circular(8.0),
+              bottomRight: Radius.circular(8.0),
+            )
+          : BorderRadius.only(
+              bottomLeft: Radius.circular(8.0),
+              topRight: Radius.circular(8.0),
+              bottomRight: Radius.circular(8.0),
             ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _renderLocalImg(BuildContext context, StickerT img, bool isOut) {
-    return Image.file(File(img.uri));
-  }
-
-  Widget _renderNetImg(BuildContext context, StickerT img, bool isOut) {
-    return CachedNetworkImage(
-      placeholder: (context, url) => Container(
-            child: CircularProgressIndicator(
-              valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-            ),
-            width: 100.0,
-            height: 100.0,
-            padding: EdgeInsets.all(30.0),
-            decoration: BoxDecoration(
-              color: Colors.grey,
-              borderRadius: BorderRadius.all(
-                Radius.circular(5.0),
-              ),
-            ),
+      child: Column(
+        children: <Widget>[
+          Container(
+            padding: EdgeInsets.all(2.0),
+            child: LimitedBox(
+                maxWidth: sticker.width.toDouble() > maxWidth
+                    ? maxWidth
+                    : sticker.width.toDouble(),
+                child: sticker.isLocal
+                    ? _renderLocalImg(context, sticker, isOut)
+                    : _renderNetImg(context, sticker, isOut)),
           ),
-      errorWidget: (context, url, error) => Material(
-            child: Image.asset(
-              'images/img_not_available.jpeg',
-              width: 100.0,
-              height: 100.0,
-              fit: BoxFit.cover,
-            ),
+        ],
+      ),
+    ),
+  );
+}
+
+Widget _renderLocalImg(BuildContext context, StickerT img, bool isOut) {
+  return Image.file(File(img.uri));
+}
+
+Widget _renderNetImg(BuildContext context, StickerT img, bool isOut) {
+  return CachedNetworkImage(
+    placeholder: (context, url) => Container(
+          child: CircularProgressIndicator(
+            valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+          ),
+          width: 100.0,
+          height: 100.0,
+          padding: EdgeInsets.all(30.0),
+          decoration: BoxDecoration(
+            color: Colors.grey,
             borderRadius: BorderRadius.all(
               Radius.circular(5.0),
             ),
-            clipBehavior: Clip.hardEdge,
           ),
-      imageUrl: img.uri,
-    );
-  }
+        ),
+    errorWidget: (context, url, error) => Material(
+          child: Image.asset(
+            'images/img_not_available.jpeg',
+            width: 100.0,
+            height: 100.0,
+            fit: BoxFit.cover,
+          ),
+          borderRadius: BorderRadius.all(
+            Radius.circular(5.0),
+          ),
+          clipBehavior: Clip.hardEdge,
+        ),
+    imageUrl: img.uri,
+  );
 }
