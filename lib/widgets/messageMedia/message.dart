@@ -1,52 +1,10 @@
 import 'package:flutter/material.dart';
-import '../../model/message_model.dart';
+import '../../models/message_model.dart';
 import './messageText.dart';
 import './messageImg.dart';
 import './messageSticker.dart';
 import './messageFile.dart';
 
-// class Message extends StatefulWidget {
-//   final MessageT message;
-//   final int index;
-//   Message(this.message, this.index, {Key key}) : super(key: key);
-
-//   _MessageState createState() => _MessageState();
-// }
-
-// class _MessageState extends State<Message> {
-
-//   @override
-//   Widget build(BuildContext context) {
-//     print('=======> reRender$widget.index');
-//      switch (widget.message.type) {
-//       case 'info':
-//         return _renderNotification(widget.message.message['text']);
-//       default:
-//         return widget.message.out
-//             ? _renderSelfMessage(widget.message)
-//             : _renderFriendMessage(widget.message);
-//     }
-//   }
-// }
-
-// class Message extends StatelessWidget {
-//   final MessageT message;
-
-//   Message(this.message);
-
-//   @override
-//   Widget build(BuildContext context) {
-//     print('=======> reRender');
-//     switch (message.type) {
-//       case 'info':
-//         return _renderNotification(message.message['text']);
-//       default:
-//         return message.out
-//             ? _renderSelfMessage(message)
-//             : _renderFriendMessage(message);
-//     }
-//   }
-// }
 
 Widget renderMessage(BuildContext context, MessageT messageObj, int index) {
   print('=======> reRender: $index');

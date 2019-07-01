@@ -3,7 +3,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
-import '../model/chat_list_model.dart';
+import '../models/chat_list_model.dart';
 
 
 class ChatList extends StatefulWidget {
