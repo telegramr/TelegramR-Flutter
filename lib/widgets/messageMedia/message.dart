@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import '../../models/message_model.dart';
 import './messageText.dart';
 import './messageImg.dart';
@@ -83,7 +84,7 @@ Widget _renderSelfMessage(BuildContext context, MessageT messageObj) {
         ),
         CircleAvatar(
           radius: 21.0,
-          backgroundImage: NetworkImage(messageObj.avatar),
+          backgroundImage: CachedNetworkImageProvider(messageObj.avatar),
         ),
       ],
     ),
@@ -99,7 +100,7 @@ Widget _renderFriendMessage(BuildContext context, MessageT messageObj) {
       children: <Widget>[
         CircleAvatar(
           radius: 21.0,
-          backgroundImage: NetworkImage(messageObj.avatar),
+          backgroundImage: CachedNetworkImageProvider(messageObj.avatar),
         ),
         Container(
           margin: EdgeInsets.only(left: 10),

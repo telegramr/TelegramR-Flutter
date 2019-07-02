@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:fluro/fluro.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -11,6 +12,7 @@ import 'dart:async' show Future;
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:flutter/services.dart';
 import 'package:multi_image_picker/multi_image_picker.dart';
+import 'package:telegramr/widgets/messageMenu/messageMenuAudio.dart';
 import 'package:telegramr/widgets/messageMenu/messageMenuSticker.dart';
 
 import '../models/message_model.dart';
@@ -31,7 +33,8 @@ class _ChatPageState extends State<ChatPage>
       new TextEditingController();
   final ScrollController listScrollController = new ScrollController();
   final FocusNode focusNode = new FocusNode();
-
+  
+  String textInput = '';
   List messages;
   List imgList = new List<File>();
   bool showMenu = false;
@@ -147,6 +150,7 @@ class _ChatPageState extends State<ChatPage>
     if (showMenu) {
       setState(() {
         showMenu = false;
+        menuName = '';
       });
     } else {
       Navigator.pop(context);
@@ -160,12 +164,16 @@ class _ChatPageState extends State<ChatPage>
         duration: Duration(milliseconds: 300), curve: Curves.easeOut);
   }
 
-  // 输入信息
-  void _textFieldChanged(String content) {}
+  // 输入文字信息
+  void _textFieldChanged(String content) {
+    setState(() {
+      textInput = content.trim() == '' ? '' : content;
+    });
+  }
 
   // 发送文字消息
-  void sendMessage(String content) {
-    if (content.trim() == '') return;
+  void sendMessage() {
+    if(textInput.trim() == '') return;
     textEditingController.clear();
     var newMessage = {
       "id": 1,
@@ -174,13 +182,14 @@ class _ChatPageState extends State<ChatPage>
       "out": true,
       "uname": "Beats0",
       "avatar": "https://avatars0.githubusercontent.com/u/29087203?s=460&v=4",
-      "message": {"text": content},
+      "message": {"text": textInput},
       "date": 1559377920312,
       "type": "text"
     };
     messages.insert(0, MessageT.fromJson(newMessage));
     setState(() {
       messages;
+      textInput = '';
     });
     this.goButtom();
   }
@@ -190,14 +199,22 @@ class _ChatPageState extends State<ChatPage>
     fetchMessage();
     // keyboardViewHeight = MediaQuery.of(context).viewInsets.bottom;
     focusNode.addListener(onFocusChange);
+    //     // 输入文字信息
+    // textEditingController.addListener(() {
+    //   if (textEditingController.text.trim() != '') {
+    //     setState(() {
+    //       textInput = textEditingController.text;
+    //     });
+    //   }
+    // });
     super.initState();
   }
 
+  // 获取焦点
   void onFocusChange() {
     if (focusNode.hasFocus) {
-      print('hasFocus');
-      // Hide sticker when keyboard appear
       setState(() {
+        menuName = '';
         showMenu = false;
       });
     }
@@ -211,12 +228,21 @@ class _ChatPageState extends State<ChatPage>
   }
 
   void setMenuName(String _menuName) {
-    if(menuName == _menuName) {
-      setMenuVisiable();
-      return;
-    }
-    if(_menuName == 'messageMenuAudio' || _menuName == 'messageMenuSticker') {
-      setMenuVisiable();
+    if (_menuName == 'messageMenuAudio' || _menuName == 'messageMenuSticker') {
+      // 在展开的情况下, 点击同一个后隐藏
+      if (showMenu && menuName == _menuName) {
+        setState(() {
+          menuName = '';
+          showMenu = false;
+        });
+      } else {
+        setState(() {
+          menuName = _menuName;
+          showMenu = true;
+        });
+        focusNode.unfocus();
+      }
+      // setMenuVisiable();
     }
   }
 
@@ -233,6 +259,7 @@ class _ChatPageState extends State<ChatPage>
 
   @override
   Widget build(BuildContext context) {
+    // TODO: GestureDetector 滑动冲突，无法右滑动返回
     // return GestureDetector(
     //   /*横向拖动的开始状态*/
     //   onHorizontalDragStart: (startDetails) {
@@ -256,10 +283,15 @@ class _ChatPageState extends State<ChatPage>
         title: Container(
           child: Row(
             children: <Widget>[
-              CircleAvatar(
-                radius: 21.0,
-                backgroundImage: NetworkImage(
-                    'https://avatars1.githubusercontent.com/u/1935767?s=180&v=4'),
+              ClipOval(
+                child: SizedBox(
+                  width: 42.0,
+                  height: 42.0,
+                  child: CachedNetworkImage(
+                    imageUrl: 'https://avatars1.githubusercontent.com/u/1935767?s=180&v=4',
+                    fit: BoxFit.fill,
+                  ),
+                ),
               ),
               Container(
                 padding: EdgeInsets.only(left: 10),
@@ -293,6 +325,7 @@ class _ChatPageState extends State<ChatPage>
         ],
       ),
       body: _renderChatMain(),
+      // TODO: 多个floatingActionButton 渲染错误
       // floatingActionButton: _renderFloatingBtn()
     );
   }
@@ -458,12 +491,10 @@ class _ChatPageState extends State<ChatPage>
             child: IconButton(
               icon: Icon(
                 Icons.send,
-                color: Colors.grey,
+                color: textInput == '' ? Colors.grey : Colors.lightBlue,
                 size: 30,
               ),
-              onPressed: () {
-                sendMessage(textEditingController.text);
-              },
+              onPressed: sendMessage,
             ),
           ),
         ],
@@ -473,26 +504,28 @@ class _ChatPageState extends State<ChatPage>
 
   Widget _renderButtomMenuBar() {
     return Container(
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        crossAxisAlignment: CrossAxisAlignment.center,
+        child: Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: <Widget>[
-        _renderButtomMenuBarItem(Icons.keyboard_voice, () => setMenuName('messageMenuAudio')),
-        _renderButtomMenuBarItem(Icons.sentiment_satisfied, () => setMenuName('messageMenuSticker')),
-        _renderButtomMenuBarItem(Icons.image, setMenuVisiable),
-        _renderButtomMenuBarItem(Icons.photo_camera, setMenuVisiable),
-        _renderButtomMenuBarItem(Icons.insert_drive_file, setMenuVisiable),
-        _renderButtomMenuBarItem(Icons.control_point, setMenuVisiable),
+        _renderButtomMenuBarItem(
+            Icons.keyboard_voice, () => setMenuName('messageMenuAudio'), color: menuName == 'messageMenuAudio' ? Colors.lightBlue : Colors.grey),
+        _renderButtomMenuBarItem(
+            Icons.sentiment_satisfied, () => setMenuName('messageMenuSticker'), color: menuName == 'messageMenuSticker' ? Colors.lightBlue : Colors.grey),
+        _renderButtomMenuBarItem(Icons.image, getImage),
+        _renderButtomMenuBarItem(Icons.photo_camera, getImage),
+        _renderButtomMenuBarItem(Icons.insert_drive_file, () => setMenuName('messageMenuFile')),
+        _renderButtomMenuBarItem(Icons.control_point, () => setMenuName('messageMenuAdd')),
       ],
     ));
   }
 
-  Widget _renderButtomMenuBarItem(IconData icon, Function func) {
+  Widget _renderButtomMenuBarItem(IconData icon, Function func, {Color color = Colors.grey}) {
     return Material(
       child: IconButton(
         icon: Icon(
           icon,
-          color: Colors.grey,
+          color: color,
           size: 30,
         ),
         onPressed: func,
@@ -501,7 +534,7 @@ class _ChatPageState extends State<ChatPage>
   }
 
   Widget _renderMenu() {
-     return AnimatedContainer(
+    return AnimatedContainer(
       curve: Curves.easeOut,
       duration: Duration(
         milliseconds: 250,
@@ -510,8 +543,9 @@ class _ChatPageState extends State<ChatPage>
       // height: keyboardViewHeight,
       height: showMenu ? 230.0 : 0.0,
       child: Container(
-        child: MessageMenuSticker(),
-      ),
-     );
+          child: menuName == 'messageMenuAudio'
+              ? MessageMeunAudio()
+              : MessageMenuSticker()),
+    );
   }
 }

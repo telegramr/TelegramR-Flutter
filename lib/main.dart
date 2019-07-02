@@ -2,6 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'pages/home.dart';
 import 'pages/chat.dart';
+import 'pages/imageViewer.dart';
+import 'pages/hero.dart';
 
 void main() => runApp(MyApp());
 
@@ -25,6 +27,12 @@ class MyApp extends StatelessWidget {
             case '/chat':
               return CupertinoPageRoute(
                   builder: (_) => ChatPage(), settings: settings);
+            case '/hero':
+              return CupertinoPageRoute(
+                  builder: (_) => SourceHeroPage(), settings: settings);
+            case '/imageViewer':
+              return CupertinoPageRoute(
+                  builder: (_) => ImageViewerPage(), settings: settings);
           }
         }
     );

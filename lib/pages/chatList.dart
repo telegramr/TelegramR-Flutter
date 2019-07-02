@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import '../models/chat_list_model.dart';
@@ -60,7 +61,7 @@ class _ChatListState extends State<ChatList> {
               child: CircleAvatar(
                 radius: 22.0,
                 backgroundColor: Colors.white,
-                backgroundImage: NetworkImage(item.avatar),
+                backgroundImage: CachedNetworkImageProvider(item.avatar),
               ),
             ),
             Container(

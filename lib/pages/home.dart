@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import './chatList.dart';
 
@@ -40,7 +41,7 @@ class _HomePageState extends State<HomePage> {
                 //      margin: EdgeInsets.zero,
                 decoration: BoxDecoration(
                   image: DecorationImage(
-                      image: NetworkImage(
+                      image: CachedNetworkImageProvider(
                           'https://ws1.sinaimg.cn/large/006nOlwNgy1fp0v3noihrj337b29eu0x.jpg'),
                       fit: BoxFit.cover),
                 ),
@@ -51,7 +52,7 @@ class _HomePageState extends State<HomePage> {
                   "Beats01998@gmail.com",
                 ),
                 currentAccountPicture: new CircleAvatar(
-                    backgroundImage: NetworkImage(
+                    backgroundImage: CachedNetworkImageProvider(
                         'https://avatars0.githubusercontent.com/u/29087203?s=460&v=4')),
                 onDetailsPressed: () {},
               ),

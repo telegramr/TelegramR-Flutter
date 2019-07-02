@@ -70,9 +70,17 @@ Widget MessageImg(BuildContext context, {ImgT img, bool isOut = false}) {
                     : MediaQuery.of(context).size.width / 4 * 3,
                 child: ClipRRect(
                   borderRadius: new BorderRadius.circular(4.0),
-                  child: img.isLocal
+                  child: GestureDetector(
+                    onTap: (){
+                      Navigator.of(context).pushNamed('/hero');
+                    },
+                    child: Hero(
+                      tag: 'imageHero',
+                      child: img.isLocal
                       ? _renderLocalImg(context, img, isOut)
                       : _renderNetImg(context, img, isOut),
+                    ),
+                  ),
                 ),
               ),
             ),
