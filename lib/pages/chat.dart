@@ -27,8 +27,7 @@ class ChatPage extends StatefulWidget {
   _ChatPageState createState() => _ChatPageState();
 }
 
-class _ChatPageState extends State<ChatPage>
-    with SingleTickerProviderStateMixin {
+class _ChatPageState extends State<ChatPage> with SingleTickerProviderStateMixin {
   final TextEditingController textEditingController =
       new TextEditingController();
   final ScrollController listScrollController = new ScrollController();
@@ -90,7 +89,8 @@ class _ChatPageState extends State<ChatPage>
       "avatar": "https://avatars0.githubusercontent.com/u/29087203?s=460&v=4",
       "message": {
         "img": {
-          "uri": image.path,
+          // "uri": image.path,
+          "uri": "https://pic.xiami.net/webh5/files/xiamiWeb/44a518a363e48baa251b29deace29013-354x341.gif",
           "hash": image.hashCode.toString(),
           "width": decodedImage.width,
           "height": decodedImage.height,

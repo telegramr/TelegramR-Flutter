@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:telegramr/pages/hero.dart';
 
 class ImgT {
   final String uri;
@@ -71,15 +72,27 @@ Widget MessageImg(BuildContext context, {ImgT img, bool isOut = false}) {
                 child: ClipRRect(
                   borderRadius: new BorderRadius.circular(4.0),
                   child: GestureDetector(
-                    onTap: (){
-                      Navigator.of(context).pushNamed('/hero');
-                    },
-                    child: Hero(
-                      tag: 'imageHero',
-                      child: img.isLocal
-                      ? _renderLocalImg(context, img, isOut)
-                      : _renderNetImg(context, img, isOut),
-                    ),
+                    // onTap: (){
+                    //   Navigator.of(context).pushNamed('/imageViewer');
+                    // },
+                    //  onTap: () {
+                    //   Navigator.of(context).push(MaterialPageRoute<Null>(
+                    //       builder: (BuildContext context) => DestinationHeroPage()));
+                    // },
+                     child: PhotoHero(
+                        uri: img.uri,
+                        onTap: () {
+                          Navigator.of(context).push(MaterialPageRoute<Null>(
+                              builder: (BuildContext context) => DestinationHeroPage(uri: img.uri)));
+                        },
+                        width: MediaQuery.of(context).size.width,
+                      ),
+                    // child: Hero(
+                    //   tag: 'imageHero',
+                    //   child: img.isLocal
+                    //   ? _renderLocalImg(context, img, isOut)
+                    //   : _renderNetImg(context, img, isOut),
+                    // ),
                   ),
                 ),
               ),
