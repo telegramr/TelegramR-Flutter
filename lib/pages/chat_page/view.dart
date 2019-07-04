@@ -17,12 +17,12 @@ import 'action.dart';
 import 'state.dart';
 
 Widget buildView(ChatState state, Dispatch dispatch, ViewService viewService) {
- 
+  // 渲染消息
   Widget _renderMessageItem(context, chatDataIndex, int index) {
-  return renderMessage(context, chatDataIndex, index);
-}
-  
-  
+    return renderMessage(context, chatDataIndex, index);
+  }
+
+  // 输入框
   Widget _renderBottomBar() {
     // setKeybordViewHeight();
     return Container(
@@ -43,7 +43,9 @@ Widget buildView(ChatState state, Dispatch dispatch, ViewService viewService) {
               keyboardType: TextInputType.text,
               focusNode: state.focusNode,
               controller: state.textEditingController,
-              onChanged: (String text) => dispatch(ChatActionCreator.onTextFieldChanged(text)),
+              onChanged: (String text) =>
+                  dispatch(ChatActionCreator.onTextFieldChanged(text)),
+
               /// TODO: 设置maxLines时会造成高度一定
               maxLines: null,
               decoration: InputDecoration(
@@ -64,23 +66,39 @@ Widget buildView(ChatState state, Dispatch dispatch, ViewService viewService) {
           Material(
             color: Colors.white,
             child: IconButton(
-              icon: Icon(
-                Icons.send,
-                color: state.textInput == '' ? Colors.grey : Colors.lightBlue,
-                size: 30,
-              ),
-              onPressed: () {
-                //  dispatch(ChatActionCreator.handleSendMessage());
-                 dispatch(ChatActionCreator.goButtom());
-              },
-              // onPressed: () => dispatch(ChatActionCreator.handleSendMessage()),
-            ),
+                icon: Icon(
+                  Icons.send,
+                  color: state.textInput == '' ? Colors.grey : Colors.lightBlue,
+                  size: 30,
+                ),
+                onPressed: () =>
+                    dispatch(ChatActionCreator.handleSendMessage())),
           ),
         ],
       ),
     );
   }
 
+  // 底部小菜单展开内容
+  Widget _renderMenu() {
+    return AnimatedContainer(
+      curve: Curves.easeOut,
+      duration: Duration(
+        milliseconds: 250,
+      ),
+      // TODO: 获取键盘高度
+      // height: keyboardViewHeight,
+      height: state.showMenu ? 230.0 : 0.0,
+      child: state.showMenu
+      ? Container(
+          child: state.menuName == 'messageMenuAudio'
+              ? MessageMeunAudio()
+              : MessageMenuSticker())
+      : Container(),
+    );
+  }
+
+  // 底部小菜单渲染组件
   Widget _renderButtomMenuBarItem(IconData icon, Function func, {Color color = Colors.grey}) {
     return Material(
       child: IconButton(
@@ -93,105 +111,100 @@ Widget buildView(ChatState state, Dispatch dispatch, ViewService viewService) {
       ),
     );
   }
-  
-  Widget _renderMenu() {
-    return AnimatedContainer(
-      curve: Curves.easeOut,
-      duration: Duration(
-        milliseconds: 250,
-      ),
-      // TODO: 获取键盘高度
-      // height: keyboardViewHeight,
-      height: state.showMenu ? 230.0 : 0.0,
-      child: Container(
-          child: state.menuName == 'messageMenuAudio'
-              ? MessageMeunAudio()
-              : MessageMenuSticker()),
-    );
-  }
 
+  // 底部小菜单渲染
   Widget _renderButtomMenuBar() {
     return Container(
-        child: Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: <Widget>[
-        _renderButtomMenuBarItem(
-            Icons.keyboard_voice, (){}),
-        _renderButtomMenuBarItem(
-            Icons.sentiment_satisfied,(){}),
-        _renderButtomMenuBarItem(Icons.image, (){}),
-        _renderButtomMenuBarItem(Icons.photo_camera, (){}),
-        _renderButtomMenuBarItem(Icons.insert_drive_file, () => (){}),
-        _renderButtomMenuBarItem(Icons.control_point, () => (){}),
-      ],
-    ));
-  }
-
-  Widget _renderChatMain() {
-    return Stack(
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
-          Column(
-            children: <Widget>[
-              Flexible(
-                child: Container(
-                  decoration: BoxDecoration(
-                    image: DecorationImage(
-                      image: AssetImage("assets/images/wallpaper.jpg"),
-                      fit: BoxFit.cover,
-                    ),
-                  ),
-                  // child: Container(
-                  //   child: Column(
-                  //     children: <Widget>[
-                  //       Text(state.count.toString()),
-                  //       RaisedButton(
-                  //         // Effect调用
-                  //         // onPressed: () => dispatch(ChatActionCreator.onAdd()),
-                  //         // reducer调用
-                  //         onPressed: () => dispatch(ChatActionCreator.add()),
-                  //         // onPressed: () => Navigator.pushNamed(context, '/request'),
-                  //         child: Icon(Icons.add),
-                  //       ),
-                  //       Text(state.messages == null ? '0' : state.messages.length.toString() ),
-                  //       RaisedButton(
-                  //         // reducer调用
-                  //         // action => reducer
-                  //         // onPressed: () => dispatch(ChatActionCreator.addMessage()),
-                  //        /// 调用
-                            /// Action: onFetchAction 调用=> Action: onFetch 映射=> Effect: _onFetch
-                            /// Effect: _onFetch 调用=> Action: didLoadAction 调用=> Action: didLoad
-                            /// Action: didLoad 映射 Reducer _onAddMessage
-                  //         onPressed: () => dispatch(ChatActionCreator.onFetchAction()),
-                  //         // onPressed: () => Navigator.pushNamed(context, '/request'),
-                  //         child: Icon(Icons.add),
-                  //       ),
-                  //     ],
-                  //   ),
-                  // ),
-                  child: state.messages == null
-                      ? Center(child: CircularProgressIndicator())
-                      : ListView.builder(
-                          controller: state.listScrollController,
-                          reverse: true,
-                          padding: EdgeInsets.symmetric(horizontal: 7.0),
-                          itemCount: state.messages.length,
-                          itemBuilder: (context, index) =>
-                              _renderMessageItem(context, state.messages[index], index),
-                        ),
-                ),
-              ),
-              _renderBottomBar(),
-              _renderButtomMenuBar(),
-              _renderMenu(),
-            ],
-          )
+          _renderButtomMenuBarItem(Icons.keyboard_voice,
+              () => dispatch(ChatActionCreator.setMenuName('messageMenuAudio')),
+              color: state.menuName == 'messageMenuAudio'
+                  ? Colors.lightBlue
+                  : Colors.grey),
+          _renderButtomMenuBarItem(Icons.sentiment_satisfied,
+              () => dispatch(ChatActionCreator.setMenuName('messageMenuSticker')),
+              color: state.menuName == 'messageMenuSticker'
+                  ? Colors.lightBlue
+                  : Colors.grey
+          ),
+          _renderButtomMenuBarItem(Icons.image, () {}),
+          _renderButtomMenuBarItem(Icons.photo_camera, () {}),
+          _renderButtomMenuBarItem(Icons.insert_drive_file, () => () {}),
+          _renderButtomMenuBarItem(Icons.control_point, () => () {}),
         ],
-      // onWillPop: onBackPress,
+      )
     );
   }
 
-   return Scaffold(
+  // main
+  Widget _renderChatMain() {
+    return Stack(
+      children: <Widget>[
+        Column(
+          children: <Widget>[
+            Flexible(
+              child: Container(
+                decoration: BoxDecoration(
+                  image: DecorationImage(
+                    image: AssetImage("assets/images/wallpaper.jpg"),
+                    fit: BoxFit.cover,
+                  ),
+                ),
+                // child: Container(
+                //   child: Column(
+                //     children: <Widget>[
+                //       Text(state.count.toString()),
+                //       RaisedButton(
+                //         // Effect调用
+                //         // onPressed: () => dispatch(ChatActionCreator.onAdd()),
+                //         // reducer调用
+                //         onPressed: () => dispatch(ChatActionCreator.add()),
+                //         // onPressed: () => Navigator.pushNamed(context, '/request'),
+                //         child: Icon(Icons.add),
+                //       ),
+                //       Text(state.messages == null ? '0' : state.messages.length.toString() ),
+                //       RaisedButton(
+                //         // reducer调用
+                //         // action => reducer
+                //         // onPressed: () => dispatch(ChatActionCreator.addMessage()),
+                //        /// 调用
+                /// Action: onFetchAction 调用=> Action: onFetch 映射=> Effect: _onFetch
+                /// Effect: _onFetch 调用=> Action: didLoadAction 调用=> Action: didLoad
+                /// Action: didLoad 映射 Reducer _onAddMessage
+                //         onPressed: () => dispatch(ChatActionCreator.onFetchAction()),
+                //         // onPressed: () => Navigator.pushNamed(context, '/request'),
+                //         child: Icon(Icons.add),
+                //       ),
+                //     ],
+                //   ),
+                // ),
+                child: state.messages == null
+                    ? Center(child: CircularProgressIndicator())
+                    : ListView.builder(
+                        controller: state.listScrollController,
+                        reverse: true,
+                        padding: EdgeInsets.symmetric(horizontal: 7.0),
+                        itemCount: state.messages.length,
+                        itemBuilder: (context, index) => _renderMessageItem(
+                            context, state.messages[index], index),
+                      ),
+              ),
+            ),
+            _renderBottomBar(),
+            _renderButtomMenuBar(),
+            _renderMenu(),
+          ],
+        )
+      ],
+    );
+  }
+
+  return WillPopScope(
+    onWillPop: () => dispatch(ChatActionCreator.backPress()),
+    child: Scaffold(
       appBar: AppBar(
         elevation: 0,
         title: Container(
@@ -241,7 +254,6 @@ Widget buildView(ChatState state, Dispatch dispatch, ViewService viewService) {
       body: Container(
         child: _renderChatMain(),
       ),
+      )
     );
   }
-
-  

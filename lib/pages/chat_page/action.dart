@@ -11,7 +11,11 @@ enum ChatAction {
   sendMessage,
   handleSendMessage,
   onAddMessage,
-  goButtom,
+  setMenuName,
+  onSetMenuName,
+  onFocus,
+  backPress,
+  onBackPress
 }
 
 class ChatActionCreator {
@@ -66,9 +70,20 @@ class ChatActionCreator {
       return Action(ChatAction.sendMessage, payload: MessageT.fromJson(newMessage));
      }
   }
-  
-  // 返回到底部
-  static Action goButtom() {
-    return Action(ChatAction.goButtom);    
+
+  static Action setMenuName(String menuName) {
+    return Action(ChatAction.onSetMenuName, payload: menuName);
+  }
+
+  static Action onFocus() {
+    return Action(ChatAction.onFocus);
+  }
+
+  static Action backPress() {
+    return Action(ChatAction.onBackPress);
+  }
+
+  static Action onBackPress() {
+    return Action(ChatAction.onBackPress);
   }
 }

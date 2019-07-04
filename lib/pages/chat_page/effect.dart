@@ -1,7 +1,7 @@
 import 'dart:convert';
 
+import 'package:flutter/material.dart';
 import 'package:fish_redux/fish_redux.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 import 'package:telegramr/models/message_model.dart';
 
@@ -15,11 +15,9 @@ Effect<ChatState> buildEffect() {
     // 对应onFetch
     ChatAction.onFetch: _onFetch,
     ChatAction.handleSendMessage: _handleSendMessage,
-    ChatAction.goButtom: _goButtom,
-    // ChatAction.onTextInput
+    // ChatAction.onBackPress: _onBackPress,
   });
 }
-
 
 // api
 Future<String> _loadChatJsonData() async {
@@ -30,6 +28,13 @@ void _init(Action action, Context<ChatState> ctx) async {
   String jsonString = await _loadChatJsonData();
   List resData = json.decode(jsonString);
   List reversedMessages = resData.map((json) => MessageT.fromJson(json)).toList();
+  
+  // addListener输入框焦点控制
+  ctx.state.focusNode.addListener(() => {
+    if(ctx.state.focusNode.hasFocus) {
+      ctx.dispatch(ChatActionCreator.onFocus())
+    }
+  });
   ctx.dispatch(ChatActionCreator.didLoadAction(reversedMessages.reversed.toList()));
 }
 
@@ -42,18 +47,23 @@ Future _onFetch(Action action, Context<ChatState> ctx) async {
 }
 
 void _onAdd(Action action, Context<ChatState> ctx) {
-  print("effect ChatActionCreator add()");
   ctx.dispatch(ChatActionCreator.add());
 }
 
+// 发送消息
 void _handleSendMessage(Action action, Context<ChatState> ctx) {
-  ctx.dispatch(ChatActionCreator.sendMessage(ctx.state.textInput));
-  // ctx.dispatch(ChatActionCreator.goButtom());
-  // _goButtom(action, ctx);
+  if(ctx.state.textInput.trim() != '') {
+    ctx.dispatch(ChatActionCreator.sendMessage(ctx.state.textInput));
+  }
 }
 
-void _goButtom(Action action, Context<ChatState> ctx) {
-  print("effect _goButtom");
-  ctx.state.listScrollController.animateTo(0.0,
-        duration: Duration(milliseconds: 300), curve: Curves.easeOut);
+// 物理按键返回
+Future<bool> _onBackPress(Action action, Context<ChatState> ctx) {
+  if (ctx.state.showMenu) {
+    ctx.dispatch(ChatActionCreator.onBackPress());
+  } else {
+    Navigator.pop(ctx.context);
+  }
+  return Future.value(false);
 }
+  

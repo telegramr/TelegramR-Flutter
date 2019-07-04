@@ -5,9 +5,9 @@ import 'package:flutter/cupertino.dart';
 
 class ChatState implements Cloneable<ChatState> {
   int count = 0;
-  final TextEditingController textEditingController = TextEditingController();
-  final ScrollController listScrollController = ScrollController();
-  final FocusNode focusNode = FocusNode();
+  TextEditingController textEditingController = TextEditingController();
+  ScrollController listScrollController = ScrollController();
+  FocusNode focusNode = FocusNode();
   
   String textInput = '';
   List messages;
@@ -20,11 +20,15 @@ class ChatState implements Cloneable<ChatState> {
   ChatState clone() {
     return ChatState()
     ..count = count
-    ..messages = messages;
+    ..messages = messages
+    ..menuName = menuName
+    ..textInput = textInput
+    ..textEditingController = textEditingController
+    ..listScrollController = listScrollController
+    ..focusNode = focusNode;
   }
 }
 
 ChatState initState(Map<String, dynamic> args){
-  //什么也没做，只是初始化数据
   return ChatState();
 }

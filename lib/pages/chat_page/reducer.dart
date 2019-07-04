@@ -11,7 +11,9 @@ Reducer<ChatState> buildReducer() {
     ChatAction.didLoad: _onAddMessage,
     ChatAction.onTextInput: _onTextInput,
     ChatAction.sendMessage: _sendMessage,
-    // ChatAction.goButtom: _goButtom,
+    ChatAction.onSetMenuName: _onSetMenuName,
+    ChatAction.onFocus: _onFocus,
+    ChatAction.onBackPress: _onBackPress
   });
 }
 
@@ -33,26 +35,60 @@ ChatState _onAddMessage(ChatState state, Action action) {
 
 // 设置textInput
 ChatState _onTextInput(ChatState state, Action action) {
-  // TODO: textInput 只能单个输入
   final ChatState newState = state.clone();
   String textInput = action.payload;
-  newState.textInput += textInput;
-  print(textInput);
+  newState.textInput = textInput;
+  newState.showMenu = true;
   return newState;
 }
 
 // 发送消息
 ChatState _sendMessage(ChatState state, Action action) {
   final ChatState newState = state.clone();
+  newState.textInput = '';
+  newState.textEditingController.clear();
   newState.messages.insert(0, action.payload);
+  newState.listScrollController.animateTo(0.0,
+      duration: Duration(milliseconds: 300), curve: Curves.easeOut);
   return newState;
 }
 
-// 返回到底部
-// ChatState _goButtom(ChatState state, Action action) {
-//   final ChatState newState = state.clone();
-//   newState.listScrollController.animateTo(0.0,
-//         duration: Duration(milliseconds: 300), curve: Curves.easeOut);
-//   return newState;
-// }
+// 设置菜单名称
+ChatState _onSetMenuName(ChatState state, Action action) {
+  final ChatState newState = state.clone();
+  String menuName = action.payload;
+  newState.menuName = menuName;
 
+  if (menuName == 'messageMenuAudio' || menuName == 'messageMenuSticker') {
+    /// 比较[oldState], 在展开的情况下, 点击同一个后隐藏
+    if (state.showMenu && state.menuName == menuName) {
+      newState.menuName = '';
+      newState.showMenu = false;
+      return newState;
+    } else {
+      newState.menuName = menuName;
+      newState.showMenu = true;
+      newState.focusNode.unfocus();
+      return newState;
+    }
+  }
+}
+
+// 输入框焦点控制
+ChatState _onFocus(ChatState state, Action action) {
+  final ChatState newState = state.clone();
+  newState.menuName = '';
+  newState.showMenu = false;
+  return newState;
+}
+
+// 按键返回
+ChatState _onBackPress(ChatState state, Action action) {
+  final ChatState newState = state.clone();
+  // 展开了菜单
+  if(state.menuName == 'messageMenuAudio' || state.menuName == 'messageMenuSticker') {
+    newState.menuName = '';
+    newState.showMenu = false;
+  }
+  return newState;
+}
