@@ -1,6 +1,5 @@
 import 'package:fish_redux/fish_redux.dart';
 import 'package:flutter/animation.dart';
-// import 'package:telegramr/models/message_model.dart';
 
 import 'state.dart';
 import 'action.dart';
@@ -13,7 +12,8 @@ Reducer<ChatState> buildReducer() {
     ChatAction.sendMessage: _sendMessage,
     ChatAction.onSetMenuName: _onSetMenuName,
     ChatAction.onFocus: _onFocus,
-    ChatAction.onBackPress: _onBackPress
+    ChatAction.didBackPress: _didBackPress,
+    ChatAction.sendOtherMessage: _sendOtherMessage
   });
 }
 
@@ -38,7 +38,7 @@ ChatState _onTextInput(ChatState state, Action action) {
   final ChatState newState = state.clone();
   String textInput = action.payload;
   newState.textInput = textInput;
-  newState.showMenu = true;
+  newState.showMenu = false;
   return newState;
 }
 
@@ -50,6 +50,14 @@ ChatState _sendMessage(ChatState state, Action action) {
   newState.messages.insert(0, action.payload);
   newState.listScrollController.animateTo(0.0,
       duration: Duration(milliseconds: 300), curve: Curves.easeOut);
+  return newState;
+}
+
+/// 发送其他非文本类消息
+ChatState _sendOtherMessage(ChatState state, Action action) {
+  final ChatState newState = state.clone();
+  newState.messages.insert(0, action.payload);
+  newState.listScrollController.animateTo(0.0, duration: Duration(milliseconds: 300), curve: Curves.easeOut);
   return newState;
 }
 
@@ -83,7 +91,7 @@ ChatState _onFocus(ChatState state, Action action) {
 }
 
 // 按键返回
-ChatState _onBackPress(ChatState state, Action action) {
+ChatState _didBackPress(ChatState state, Action action) {
   final ChatState newState = state.clone();
   // 展开了菜单
   if(state.menuName == 'messageMenuAudio' || state.menuName == 'messageMenuSticker') {

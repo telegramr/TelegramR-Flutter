@@ -81,9 +81,10 @@ Widget MessageImg(BuildContext context, {ImgT img, bool isOut = false}) {
                     // },
                      child: PhotoHero(
                         uri: img.uri,
+                        isLocal: img.isLocal,
                         onTap: () {
                           Navigator.of(context).push(MaterialPageRoute<Null>(
-                              builder: (BuildContext context) => DestinationHeroPage(uri: img.uri)));
+                              builder: (BuildContext context) => DestinationHeroPage(uri: img.uri, isLocal: img.isLocal,)));
                         },
                         width: MediaQuery.of(context).size.width,
                       ),

@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart' show timeDilation;
@@ -26,10 +28,12 @@ class SourceHeroPage extends StatelessWidget {
 
 class DestinationHeroPage extends StatelessWidget {
   final String uri;
+  final bool isLocal;
+
   // TODO: 添加 thumb 图片类型
   final List<String> thumb;
 
-  DestinationHeroPage({Key key, this.uri = '', this.thumb}) : super(key: key);
+  DestinationHeroPage({Key key, this.uri = '', this.isLocal = false, this.thumb}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -57,24 +61,24 @@ class DestinationHeroPage extends StatelessWidget {
         child: uri == ''
             ? Center(child: CircularProgressIndicator())
             : PhotoHero(
-                uri: uri,
-                width: MediaQuery.of(context).size.width,
-                onTap: () {
-                  Navigator.of(context).pop();
-                },
-              ),
+                    uri: uri,
+                    isLocal: isLocal,
+                    width: MediaQuery.of(context).size.width,
+                    onTap: () => Navigator.of(context).pop()
+                  ),
       ),
     );
   }
 }
 
 class PhotoHero extends StatelessWidget {
-  const PhotoHero({Key key, this.uri, this.onTap, this.width})
+  const PhotoHero({Key key, this.uri, this.onTap, this.width, this.isLocal = false})
       : super(key: key);
 
   final String uri;
   final VoidCallback onTap;
   final double width;
+  final bool isLocal;
 
   Widget build(BuildContext context) {
     return SizedBox(
@@ -85,10 +89,9 @@ class PhotoHero extends StatelessWidget {
           color: Colors.transparent,
           child: InkWell(
             onTap: onTap,
-            child: CachedNetworkImage(
-              imageUrl: uri,
-              fit: BoxFit.contain,
-            ),
+            child: isLocal
+                  ? Image.file(File(uri))
+                  : CachedNetworkImage(imageUrl: uri, fit: BoxFit.contain),
           ),
         ),
       ),

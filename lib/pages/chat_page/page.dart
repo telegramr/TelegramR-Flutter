@@ -12,5 +12,8 @@ class ChatPage extends Page<ChatState, Map<String, dynamic>> {
           effect: buildEffect(),
           reducer: buildReducer(),
           view: buildView,
+          // dependencies: Dependencies<HomePageState>(
+          //     adapter: MovieGroupAdapter(),
+          //     slots: <String, Dependent<HomePageState>>{}),
         );
 }

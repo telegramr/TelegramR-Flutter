@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:telegramr/models/sticker.dart';
 import '../../models/message_model.dart';
 import './messageText.dart';
 import './messageImg.dart';
@@ -34,7 +35,7 @@ Widget _renderMessageContent(BuildContext context, MessageT messageObj) {
       break;
     case 'sticker':
       return MessageSticker(context,
-          sticker: StickerT.fromJson(messageObj.message['sticker']),
+          sticker: StickerItemT.fromJson(messageObj.message['sticker']),
           isOut: messageObj.out);
       break;
     case 'file':

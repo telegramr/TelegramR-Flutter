@@ -12,7 +12,8 @@ StickerItemT _$StickerItemTFromJson(Map<String, dynamic> json) {
       width: json['width'] as int,
       height: json['height'] as int,
       size: json['size'] as int,
-      hash: json['hash'] as String);
+      hash: json['hash'] as String,
+      thumb_id: json['thumb_id'] as int);
 }
 
 Map<String, dynamic> _$StickerItemTToJson(StickerItemT instance) =>
@@ -21,7 +22,8 @@ Map<String, dynamic> _$StickerItemTToJson(StickerItemT instance) =>
       'width': instance.width,
       'height': instance.height,
       'size': instance.size,
-      'hash': instance.hash
+      'hash': instance.hash,
+      'thumb_id': instance.thumb_id
     };
 
 StickerT _$StickerTFromJson(Map<String, dynamic> json) {

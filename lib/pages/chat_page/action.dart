@@ -1,5 +1,6 @@
 import 'package:fish_redux/fish_redux.dart';
 import 'package:telegramr/models/message_model.dart';
+import 'package:telegramr/models/sticker.dart';
 
 enum ChatAction {
   add, 
@@ -15,7 +16,13 @@ enum ChatAction {
   onSetMenuName,
   onFocus,
   backPress,
-  onBackPress
+  onBackPress,
+  didBackPress,
+  sendOtherMessage,
+  handleSendOtherMessage,
+  getImage,
+  handleGetImage,
+  handleSendSticker
 }
 
 class ChatActionCreator {
@@ -71,6 +78,31 @@ class ChatActionCreator {
      }
   }
 
+  static Action handleSendSticker(StickerItemT sticker) {
+    var newMessage = {
+      "id": 1,
+      "from_id": 1,
+      "to_id": 2,
+      "out": true,
+      "uname": "Beats0",
+      "avatar": "https://avatars0.githubusercontent.com/u/29087203?s=460&v=4",
+       "message": {
+        "sticker": sticker.toJson()
+      },
+      "date": 1559377920312,
+      "type": "sticker"
+    };
+    return Action(ChatAction.sendOtherMessage, payload: MessageT.fromJson(newMessage));
+  }
+
+  static Action handleGetImage() {
+    return Action(ChatAction.getImage);
+  }
+
+  static Action handleSendOtherMessage(Map newMessage) {
+      return Action(ChatAction.sendOtherMessage, payload: MessageT.fromJson(newMessage));
+  }
+
   static Action setMenuName(String menuName) {
     return Action(ChatAction.onSetMenuName, payload: menuName);
   }
@@ -85,5 +117,9 @@ class ChatActionCreator {
 
   static Action onBackPress() {
     return Action(ChatAction.onBackPress);
+  }
+
+  static Action didBackPress() {
+    return Action(ChatAction.didBackPress);
   }
 }

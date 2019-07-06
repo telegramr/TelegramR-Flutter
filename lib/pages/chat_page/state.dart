@@ -21,6 +21,7 @@ class ChatState implements Cloneable<ChatState> {
     return ChatState()
     ..count = count
     ..messages = messages
+    ..showMenu = showMenu
     ..menuName = menuName
     ..textInput = textInput
     ..textEditingController = textEditingController

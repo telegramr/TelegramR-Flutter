@@ -5,14 +5,10 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:fish_redux/fish_redux.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:multi_image_picker/multi_image_picker.dart';
-import 'package:telegramr/models/message_model.dart';
 import 'package:telegramr/widgets/messageMedia/message.dart';
 import 'package:telegramr/widgets/messageMenu/messageMenuAudio.dart';
 import 'package:telegramr/widgets/messageMenu/messageMenuSticker.dart';
 
-import '../chatList.dart';
 import 'action.dart';
 import 'state.dart';
 
@@ -93,7 +89,7 @@ Widget buildView(ChatState state, Dispatch dispatch, ViewService viewService) {
       ? Container(
           child: state.menuName == 'messageMenuAudio'
               ? MessageMeunAudio()
-              : MessageMenuSticker())
+              : MessageMenuSticker(dispatch))
       : Container(),
     );
   }
@@ -130,7 +126,7 @@ Widget buildView(ChatState state, Dispatch dispatch, ViewService viewService) {
                   ? Colors.lightBlue
                   : Colors.grey
           ),
-          _renderButtomMenuBarItem(Icons.image, () {}),
+          _renderButtomMenuBarItem(Icons.image, () => dispatch(ChatActionCreator.handleGetImage())),
           _renderButtomMenuBarItem(Icons.photo_camera, () {}),
           _renderButtomMenuBarItem(Icons.insert_drive_file, () => () {}),
           _renderButtomMenuBarItem(Icons.control_point, () => () {}),

@@ -10,9 +10,12 @@ class StickerItemT {
   final int height;
   final int size;
   final String hash;
+  final int thumb_id;
 
-  StickerItemT({this.uri, this.width, this.height, this.size, this.hash});
+  StickerItemT({this.uri, this.width, this.height, this.size, this.hash, this.thumb_id});
+
   factory StickerItemT.fromJson(Map<String, dynamic> json) => _$StickerItemTFromJson(json);
+  Map<String, dynamic> toJson() => _$StickerItemTToJson(this);
 }
 
 @JsonSerializable()
