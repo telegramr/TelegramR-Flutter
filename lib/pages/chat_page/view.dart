@@ -250,6 +250,16 @@ Widget buildView(ChatState state, Dispatch dispatch, ViewService viewService) {
       body: Container(
         child: _renderChatMain(),
       ),
+      floatingActionButton: FloatingActionButton(
+        elevation: 1.0,
+              highlightElevation: 1.0,
+              child: Icon(
+                Icons.arrow_downward,
+                color: Colors.grey,
+              ),
+              onPressed: () => dispatch(ChatActionCreator.showStickerDialog()),
+              backgroundColor: Colors.white,
+      ),
       )
     );
   }

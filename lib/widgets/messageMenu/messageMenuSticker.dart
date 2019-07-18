@@ -64,8 +64,8 @@ class _MessageMenuStickerState extends State<MessageMenuSticker>
     return thumbs.length == null || thumbs.length == 0
         ? Center(child: CircularProgressIndicator())
         : DefaultTabController(
-            length: thumbs.length, // Added
-            initialIndex: 0, //Ad
+            length: thumbs.length,
+            initialIndex: 0,
             child: Container(
               child: Column(
                 children: <Widget>[
@@ -85,12 +85,7 @@ class _MessageMenuStickerState extends State<MessageMenuSticker>
                                           childAspectRatio: 1.0),
                                   children: item.stickers
                                       .map((sticker) => GestureDetector(
-                                            // onTap: () {
-                                            //   print(sticker.uri);
-                                            // },
-                                            // onTap: () => dispatch(ChatActionCreator.handleSendMessage()),
                                             onTap: () => widget.dispatch(ChatActionCreator.handleSendSticker(sticker)),
-                                            // onTap: () => dispatch(),
                                             child: CachedNetworkImage(
                                                 imageUrl: sticker.uri),
                                           ))

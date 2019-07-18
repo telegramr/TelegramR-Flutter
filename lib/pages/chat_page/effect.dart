@@ -5,7 +5,9 @@ import 'package:fish_redux/fish_redux.dart';
 import 'package:flutter/services.dart';
 import 'package:telegramr/models/message_model.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:multi_image_picker/multi_image_picker.dart';
+import 'package:telegramr/models/sticker_model.dart';
 
 
 import 'state.dart';
@@ -19,7 +21,8 @@ Effect<ChatState> buildEffect() {
     ChatAction.onFetch: _onFetch,
     ChatAction.handleSendMessage: _handleSendMessage,
     ChatAction.onBackPress: _onBackPress,
-    ChatAction.getImage: _getImage
+    ChatAction.getImage: _getImage,
+    ChatAction.showStickerDialog: _showStickerDialog
   });
 }
 
@@ -125,4 +128,173 @@ Future _sendSticker(Action action, Context<ChatState> ctx) async {
   };
   ctx.dispatch(ChatActionCreator.handleSendOtherMessage(newMessage));
  }
-  
+
+// sticker 预览菜单dialog
+void _showStickerDialog(Action action, Context<ChatState> ctx) async {
+  String jsonString = await rootBundle.loadString('assets/stickerData.json');
+
+  // StickerT stickers;
+  List resData = json.decode(jsonString);
+  // println(resData);
+  // stickers = resData[0];
+  // resData.map((v) => {
+
+  // });
+  // List<StickerT> stickers = resData.map((json) => StickerT.fromJson(json));
+
+  // print(resData[0]);
+  // List resData = json.decode(jsonString);
+  // List<StickerT> stickers = resData.map((json) => StickerT.fromJson(json)).toList();
+  // StickerItemT sticker = stickers[0];
+  double ctxWidth = MediaQuery.of(ctx.context).size.width;
+  double stickerWidth = (ctxWidth - 40) / 5;
+  Map sticker = {
+    "id": 1,
+    "title": '233',
+    "thumb": "https://i0.hdslb.com/bfs/album/1ed54435efcef302bb5582d49447c7d0d75d1a99.jpg",
+    "stickers": [{
+      "uri": "https://i0.hdslb.com/bfs/album/1ed54435efcef302bb5582d49447c7d0d75d1a99.jpg",
+      "width": 150,
+      "height": 150,
+      "hash": "",
+      "size": 1024,
+      "thumb_id": 1
+    }, {
+      "uri": "https://i0.hdslb.com/bfs/album/1af4d7b6e578b485a611ecfff0ee49626ac0d75a.jpg",
+      "width": 150,
+      "height": 150,
+      "hash": "",
+      "size": 1024,
+      "thumb_id": 1
+    }, {
+      "uri": "https://i0.hdslb.com/bfs/album/020b87c07f6e304750bf6f73fd5c271c3118a708.jpg",
+      "width": 150,
+      "height": 150,
+      "hash": "",
+      "size": 1024,
+      "thumb_id": 1
+    }, {
+      "uri": "https://i0.hdslb.com/bfs/album/3ddf77cf601431bea568c38ae3d80bc341ca6e1a.jpg",
+      "width": 150,
+      "height": 150,
+      "hash": "",
+      "size": 1024,
+      "thumb_id": 1
+    }]
+  };
+
+  var result = await showDialog(
+    context: ctx.context,
+    builder: (ctx) {
+      return Material(
+        type: MaterialType.transparency,
+        child: Container(
+          alignment: Alignment.bottomCenter,
+          child: SizedBox(
+            width: MediaQuery.of(ctx).size.width,
+            height: MediaQuery.of(ctx).size.height / 2 + 50.0,
+            child: Container(
+              decoration: ShapeDecoration(
+                color: Color(0xFFFFFFFF),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(8.0),
+                    topRight: Radius.circular(8.0),
+                  )
+                )
+              ),
+              child: Column(
+                mainAxisSize: MainAxisSize.max,
+                children: <Widget>[
+                   Container(
+                    height: 4.0,
+                    width: 45.0,
+                    margin: const EdgeInsets.only(top: 8.0),
+                    decoration: BoxDecoration(
+                        color: const Color.fromARGB(255, 214, 215, 218),
+                        borderRadius: BorderRadius.all(const Radius.circular(5.0))),
+                  ),
+                  // sticker text
+                  Container(
+                    padding: EdgeInsets.all(10.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: <Widget>[
+                        Text('DuAng', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700)),
+                        Container(
+                          child: InkResponse(
+                            onTap: () => Navigator.of(ctx).pop(1),
+                            child: Icon(Icons.more_vert, color: Colors.grey),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  // sticker GridView
+                  Container(
+                    padding: EdgeInsets.symmetric(horizontal: 5.0),
+                    height: MediaQuery.of(ctx).size.height / 2 - 50.0,
+                    child: GridView(
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 5,
+                          mainAxisSpacing: 2.0,
+                          crossAxisSpacing: 2.0,
+                          childAspectRatio: 1.0),
+                      children: <Widget>[
+                         CachedNetworkImage(
+                            imageUrl: 'https://i0.hdslb.com/bfs/album/3ddf77cf601431bea568c38ae3d80bc341ca6e1a.jpg',
+                            width: 50.0),
+                             CachedNetworkImage(
+                            imageUrl: 'https://i0.hdslb.com/bfs/album/3ddf77cf601431bea568c38ae3d80bc341ca6e1a.jpg',
+                            width: 50.0),
+                             CachedNetworkImage(
+                            imageUrl: 'https://i0.hdslb.com/bfs/album/3ddf77cf601431bea568c38ae3d80bc341ca6e1a.jpg',
+                            width: 50.0),
+                             CachedNetworkImage(
+                            imageUrl: 'https://i0.hdslb.com/bfs/album/3ddf77cf601431bea568c38ae3d80bc341ca6e1a.jpg',
+                            width: 50.0),
+                             CachedNetworkImage(
+                            imageUrl: 'https://i0.hdslb.com/bfs/album/3ddf77cf601431bea568c38ae3d80bc341ca6e1a.jpg',
+                            width: 50.0),
+                            CachedNetworkImage(
+                            imageUrl: 'https://i0.hdslb.com/bfs/album/3ddf77cf601431bea568c38ae3d80bc341ca6e1a.jpg',
+                            ),
+                      ]
+                    )
+                  ),
+                  // sticker action buttom
+                  Expanded(
+                    child: Align(
+                      alignment: Alignment.bottomCenter,
+                      child: RawMaterialButton(
+                        onPressed: () {},
+                        child: Container(
+                          decoration: BoxDecoration(
+                            border: Border(
+                              top: BorderSide(
+                                color: Colors.black38,
+                                width: 0.2,
+                                style: BorderStyle.solid)),
+                          ),
+                          alignment: Alignment.center,
+                          width: ctxWidth,
+                          height: 50.0,
+                          child: Text('REMOVE 120 张贴纸', style: TextStyle(
+                            color: Colors.red,
+                            fontSize: 16,
+                            fontWeight: FontWeight.w600)),
+                        ),
+                      ),
+                    ),
+                  ),
+                ]
+              ),
+            ),
+          ),
+        ),
+      );
+    },
+  );
+  print("result = $result");
+}

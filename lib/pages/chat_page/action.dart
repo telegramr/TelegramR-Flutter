@@ -22,7 +22,8 @@ enum ChatAction {
   handleSendOtherMessage,
   getImage,
   handleGetImage,
-  handleSendSticker
+  handleSendSticker,
+  showStickerDialog
 }
 
 class ChatActionCreator {
@@ -121,5 +122,9 @@ class ChatActionCreator {
 
   static Action didBackPress() {
     return Action(ChatAction.didBackPress);
+  }
+  
+  static Action showStickerDialog() {
+    return Action(ChatAction.showStickerDialog);
   }
 }

@@ -86,7 +86,7 @@ Widget _renderFile(BuildContext context, FileT file, bool isOut) {
             color: Colors.white,
             size: 20.0,
           ),
-          shape: new CircleBorder(),
+          shape: CircleBorder(),
         ),
       ),
       LimitedBox(
