@@ -1,32 +1,22 @@
-# telegramr
+# TelegramR
 
 TelegramR Flutter application.
 
-## Getting Started
+仿TelegramR，但是因为时间 ~~(菜)~~ 的问题，半坑状态，偶尔更新
 
-This project is a starting point for a Flutter application.
+### 截图预览
 
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
-
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+Drawer | ChatList | Chat | Message | Sticker 
+:-: | :-: | :-: | :-: | :-:
+![](https://ws1.sinaimg.cn/large/006nOlwNly1g934fwjnq6j30u01t07i7.jpg) | ![](https://ws1.sinaimg.cn/large/006nOlwNly1g934fw76n5j30u01t0429.jpg) | ![](https://ws1.sinaimg.cn/large/006nOlwNly1g934fz8zz8j30u01t0h3v.jpg) | ![](https://ws1.sinaimg.cn/large/006nOlwNly1g934fz9jfsj30u01t07qv.jpg) | ![](https://ws1.sinaimg.cn/large/006nOlwNly1g934fy4ac7j30u01t07le.jpg) | 
 
 
-vscode 代码片段
+### 下载
 
-slw
+[android install](https://github.com/telegramr/TelegramR-Flutter/releases/download/1.0.0/com.telegramr.telegramr.apk)
 
-slwp
 
-android studio
-
-st
-
-#### multi_image_picker 导致崩溃
+### 迁移到AndroidX
 
 > https://www.cnblogs.com/hupo376787/p/10563454.html
 
@@ -37,14 +27,18 @@ android studio 选择 android 文件夹, 右键 Flutter -> Open android moudule 
 升级时底部菜单 Refactoring Preview -> Do Refector
 
 
-dart语法
+### dart语法
 
 https://www.yiibai.com/dart/dart_programming_inserting_elements_into_list.html
 
-json 序列化
+### json 序列化
 
 https://github.com/PoojaB26/ParsingJSON-Flutter
 
-数据库设计
+### 数据库设计
 
 https://blog.csdn.net/u010098331/article/details/51493016
+
+### 状态管理 fish-redux
+
+https://github.com/alibaba/fish-redux
